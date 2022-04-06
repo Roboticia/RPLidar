@@ -355,7 +355,7 @@ class RPLidar(object):
         time.sleep(2)
         self.clean_input()
 
-    def iter_measures(self, scan_type='normal', max_buf_meas=3000):
+    def iter_measurments(self, scan_type='normal', max_buf_meas=3000):
         '''Iterate over measures. Note that consumer must be fast enough,
         otherwise data will be accumulated inside buffer and consumer will get
         data with increasing lag.
@@ -439,10 +439,10 @@ class RPLidar(object):
         scan : list
             List of the measures. Each measurment is tuple with following
             format: (quality, angle, distance). For values description please
-            refer to `iter_measures` method's documentation.
+            refer to `iter_measurments` method's documentation.
         '''
         scan_list = []
-        iterator = self.iter_measures(scan_type, max_buf_meas)
+        iterator = self.iter_measurments(scan_type, max_buf_meas)
         for new_scan, quality, angle, distance in iterator:
             if new_scan:
                 if len(scan_list) > min_len:
