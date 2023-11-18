@@ -399,7 +399,7 @@ class RPLidar(object):
             if self.scanning[2] == 'express':
                 if self.express_trame == 32:
                     self.express_trame = 0
-                    if not self.express_data:
+                    if not self.express_data or type(self.express_data) == bool:
                         self.logger.debug('reading first time bytes')
                         self.express_data = ExpressPacket.from_string(
                                             self._read_response(dsize))
