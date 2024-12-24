@@ -55,7 +55,7 @@ HEALTH_TYPE = 6
 
 # Constants & Command to start A2 motor
 MAX_MOTOR_PWM = 1023
-DEFAULT_MOTOR_PWM = 660
+DEFAULT_MOTOR_PWM = 60
 SET_PWM_BYTE = b'\xF0'
 
 _HEALTH_STATUSES = {
@@ -157,6 +157,12 @@ class RPLidar(object):
     def _set_pwm(self, pwm):
         payload = struct.pack("<H", pwm)
         self._send_payload_cmd(SET_PWM_BYTE, payload)
+    
+    def set_motor_speed(self, pwm):
+        '''Sets the motor speed using PWM (0 to 1023).'''
+        if not (0 <= pwm <= MAX_MOTOR_PWM):
+            raise ValueError(f"PWM value must be between 0 and {MAX_MOTOR_PWM}.")
+        self._set_pwm(pwm)
 
     @property
     def motor_speed(self):
@@ -355,7 +361,7 @@ class RPLidar(object):
         time.sleep(2)
         self.clean_input()
 
-    def iter_measures(self, scan_type='normal', max_buf_meas=3000):
+    def iter_measures(self, scan_type='normal', max_buf_meas=10000):
         '''Iterate over measures. Note that consumer must be fast enough,
         otherwise data will be accumulated inside buffer and consumer will get
         data with increasing lag.
